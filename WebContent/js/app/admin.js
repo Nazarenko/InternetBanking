@@ -5,36 +5,35 @@
 	// Data for accounts table rows
 	var AccountsCollection = Backbone.Collection.extend({
 		model : AccountModel,
-		url : 'admin/ajaxAccounts.html'
+		url : 'accounts.html'
 	});
 	
 	var PagingModel = Backbone.Model.extend({
-		url: 'admin/ajaxAccountsPages.html'
+		url: 'accountsPages.html'
 	});
 	
 	var TransactionCollection = Backbone.Collection.extend({
+        url: 'transactionsLast'
 	});
 	
 	// Detailed account info
 	var AccountInfoModel = Backbone.Model.extend({
-		url : 'admin/ajaxAccount.html', 
-		transactions : new TransactionCollection(),
-	
+		urlRoot : 'account',
 		// sets 'transactions' attribute as collection
-		set: function(attributes, options) {
-		    if (attributes.transactions !== undefined) {
-		    	this.transactions.reset(attributes.transactions);
-		    	delete attributes.transactions;
-		    }
-		    return Backbone.Model.prototype.set.call(this, attributes, options);
-		},
+//		set: function(attributes, options) {
+//		    if (attributes.transactions !== undefined) {
+//		    	this.transactions.reset(attributes.transactions);
+//		    	delete attributes.transactions;
+//		    }
+//		    return Backbone.Model.prototype.set.call(this, attributes, options);
+//		},
 	
 		// calls account switch status on server
 		changeStatus: function() {
 		    var self = this;
 		    $.ajax({
 		        type: 'POST',
-		        url: 'admin/ajaxAccountUpdateStatus.html',
+		        url: 'accountUpdateStatus',
 		        data: { 
 		        	// account number
 		            'number': self.get('number'),
@@ -46,7 +45,7 @@
 		        		'status': data.status, 
 		        		'settings': BtnSettings[data.status]
 		        		});
-		        },
+		        }
 		    });
 		}
 	});
@@ -114,6 +113,26 @@
 		initialize: function () { 
 			this.pagingModel = new PagingModel({});
 			this.pagingView = new PagingView({el: $("#contentFooter"), model : this.pagingModel});
+            this.accountsCollection = new AccountsCollection();
+            this.accountsTableView = new AccountsTableView({
+                el: $("#contentBody"),
+                collection : this.accountsCollection
+            });
+            this.accountsTableView.router = this;
+
+            this.accountInfoModel = new AccountInfoModel();
+
+            this.accountView = new AccountView({
+                el: $("#contentBody"),
+                model : this.accountInfoModel
+            });
+            this.accountView.router = this;
+
+            this.transactions = new TransactionCollection();
+            this.transactionsTableView = new TransactionsTableView({
+                el: $("#contentFooter"),
+                collection : this.transactions
+            });
 		},
 		
 		routes : {
@@ -133,47 +152,28 @@
 			this.pagingModel.clear({silent : true});
 			this.pagingModel.set({cpage : page});
 			this.pagingModel.fetch();
-			
-			var accountsCollection = new AccountsCollection();
-			var accountsTableView = new AccountsTableView({
-				el: $("#contentBody"),
-				collection : accountsCollection
-			});
-			accountsTableView.router = this;
-			accountsCollection.fetch({
+
+			this.accountsCollection.fetch({
 				data : {
 					page : page
 				}
 			});
-
 		},
 
 		// shows account detailed information
 		account : function(account) {
-			
-			var accountInfoModel = new AccountInfoModel();
-			
-			var accountView = new AccountView({
-				el: $("#contentBody"), 
-				model : accountInfoModel
-			});
-			accountView.router = this;
-			
-			var transactionsTableView = new TransactionsTableView({
-				el: $("#contentFooter"), 
-				collection : accountInfoModel.transactions
-			});
-			
-			accountInfoModel.fetch({
-				data : {
-					number : account
-				},
+
+            this.accountInfoModel.set({id : account});
+            var self = this;
+			this.accountInfoModel.fetch({
 				success: function(model, responce) {
-					accountInfoModel.set({
+					self.accountInfoModel.set({
 		        		'settings': BtnSettings[responce.status]
 		        		});
 		        }
 			});
+
+            this.transactions.fetch({data : {number : account}});
 		}
 
 	});

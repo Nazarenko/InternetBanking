@@ -11,17 +11,17 @@ http://www.springframework.org/schema/security/spring-security-3.1.xsd'>
 	<beans:import resource='classpath:applicationContext.xml' />
 	
 	<beans:bean id="redirectHandler" class="com.handlers.RedirectHandler ">
-		<beans:property name="adminUrl" value="/admin.html" />
-		<beans:property name="userUrl" value="/client.html" />
+		<beans:property name="adminUrl" value="/app/admin" />
+		<beans:property name="userUrl" value="/app/client" />
 	</beans:bean>
 	
 	<http>
-		<intercept-url pattern='/client*' access='ROLE_USER' />
-		<intercept-url pattern='/admin*' access='ROLE_ADMIN' />
-		<form-login login-page='/login.html'
+		<intercept-url pattern='/app/client*' access='ROLE_USER' />
+		<intercept-url pattern='/app/admin*' access='ROLE_ADMIN' />
+		<form-login login-page='/app/login'
 			authentication-success-handler-ref="redirectHandler"
-			authentication-failure-url='/login.html?error=true' />
-		<logout logout-success-url='/login.html' />
+			authentication-failure-url='/app/login?error=true' />
+		<logout logout-success-url='/app/login' />
 		<!-- <anonymous username='guest' granted-authority='ROLE_GUEST' /> -->
 		<remember-me />
 	</http>

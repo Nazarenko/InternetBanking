@@ -51,6 +51,7 @@
 	}
 	$(function() {
 		var clientRouter = new ClientRouter();
+        clientRouter.number = ${number};
 		Backbone.history.start();
 	});
 </script>

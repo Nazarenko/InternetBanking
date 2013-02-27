@@ -14,24 +14,26 @@ var BtnSettings = {
 		} 
 };
 
-// load and rendering templates
-function renderTemplate(item) {
-	var file = 'tmpl/' + item.name + '.tmpl.htm';
-	$.ajax({
-		url : file,
-		async : false,
-		dataType : 'text',
-		success : function(contents) {
-			$.templates({
-				template : contents
-			});
-			$(item.selector).html($.render.template(item.data));
-			if (typeof item.callback !== 'undefined') {
-				item.callback();
-			}
+var templates = {};
 
-		}
-	});
+// loads and caches template
+var loadTemplate = function(name){
+    var template = templates[name] || $.get("../tmpl/" + name + ".tmpl.htm");
+    templates[name] = template;
+    return template;
+}
+
+// gets and renders templates
+function renderTemplate(item) {
+    loadTemplate(item.name).done(function(contents){
+        $.templates({
+            template : contents
+        });
+        $(item.selector).html($.render.template(item.data));
+        if (typeof item.callback !== 'undefined') {
+            item.callback();
+        }
+    });
 }
 
 

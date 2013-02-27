@@ -1,10 +1,9 @@
 package com.dao.impl;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.sql.DataSource;
 
@@ -22,7 +21,18 @@ import com.model.ClientStatus;
 @Repository
 public class ClientJDBCDaoImpl implements ClientDao {
 
+    private Properties queries;
+
     private NamedParameterJdbcTemplate jdbcTemplate;
+
+    public Properties getQueries() {
+        return queries;
+    }
+
+    @Autowired
+    public void setQueries(Properties queries) {
+        this.queries = queries;
+    }
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
@@ -35,12 +45,11 @@ public class ClientJDBCDaoImpl implements ClientDao {
 
 	@Override
 	public Client findByLogin(String login) {
-		String sql = "SELECT c.* FROM clients c "
-				+ "INNER JOIN users u ON c.id = u.id " + "WHERE u.login = :login";
+		String sql = queries.getProperty("find_client_by_login");
         SqlParameterSource namedParameters = new MapSqlParameterSource(
                 "login", login);
 		try {
-			Client user = (Client) getJdbcTemplate().query(sql,
+			Client user = (Client) getJdbcTemplate().queryForObject(sql,
                     namedParameters, new ClientRowMapper());
 
 			return user;
@@ -51,9 +60,9 @@ public class ClientJDBCDaoImpl implements ClientDao {
 
 	@Override
 	public Client findById(Integer clientId) {
-		String sql = "SELECT * FROM clients WHERE id = :clientId";
+		String sql = queries.getProperty("find_client_by_id");
         SqlParameterSource namedParameters = new MapSqlParameterSource(
-                "clientId", clientId);
+                "id", clientId);
 		try {
 			Client user = (Client) getJdbcTemplate().queryForObject(sql,
 					namedParameters, new ClientRowMapper());
@@ -65,7 +74,7 @@ public class ClientJDBCDaoImpl implements ClientDao {
 
 	@Override
 	public Client findByNumber(String number) {
-		String sql = "SELECT * FROM clients WHERE number = :number";
+		String sql = queries.getProperty("find_client_by_number");
         SqlParameterSource namedParameters = new MapSqlParameterSource(
                 "number", number);
 		try {
@@ -79,7 +88,7 @@ public class ClientJDBCDaoImpl implements ClientDao {
 
 	@Override
 	public List<Client> findClients(Integer start, Integer limit) {
-		String sql = "SELECT * FROM clients ORDER BY status, lastname, firstname LIMIT ?, ?";
+		String sql = queries.getProperty("find_clients_with_limit");
         Map<String, Object> namedParameters = new HashMap<String, Object>();
         namedParameters.put("start", start);
         namedParameters.put("limit", limit);
@@ -92,9 +101,9 @@ public class ClientJDBCDaoImpl implements ClientDao {
 
 	@Override
 	public void updateStatus(String number, ClientStatus status) {
-		String sql = "UPDATE clients SET status=:status WHERE number=:number";
+		String sql = queries.getProperty("update_client_status");
         Map<String, Object> namedParameters = new HashMap<String, Object>();
-        namedParameters.put("status", status);
+        namedParameters.put("status", status.toString());
         namedParameters.put("number", number);
 		getJdbcTemplate().update(sql,
 				namedParameters);
@@ -102,7 +111,7 @@ public class ClientJDBCDaoImpl implements ClientDao {
 
 	@Override
 	public BigDecimal findClientSum(Integer clientId) {
-		String sql = "SELECT balance FROM client_balance WHERE client_id = :clientId ";
+		String sql = queries.getProperty("find_client_balance");
         SqlParameterSource namedParameters = new MapSqlParameterSource(
                 "clientId", clientId);
 		BigDecimal sum = (BigDecimal) getJdbcTemplate().queryForObject(sql,
@@ -113,7 +122,7 @@ public class ClientJDBCDaoImpl implements ClientDao {
 
 	@Override
 	public void updateBalance(Integer clientId, BigDecimal sum) {
-		String query = "UPDATE client_balance SET balance = balance + :sum WHERE client_id=:clientId";
+		String query = queries.getProperty("update_client_balance");
         Map<String, Object> namedParameters = new HashMap<String, Object>();
         namedParameters.put("sum", sum);
         namedParameters.put("clientId", clientId);
@@ -122,10 +131,8 @@ public class ClientJDBCDaoImpl implements ClientDao {
 
 	@Override
 	public Integer getClientsCount() {
-		String sql = "SELECT COUNT(*) FROM clients ";
-
+		String sql = queries.getProperty("find_clients_count");
 		Integer count = (Integer) getJdbcTemplate().queryForInt(sql, new MapSqlParameterSource());
-
 		return count;
 	}
 

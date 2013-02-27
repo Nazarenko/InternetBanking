@@ -27,7 +27,7 @@
 	<section>
 		<div id="login-form-div">
 			<form id='login-form' name='f' class="form-horizontal"
-				action="<c:url value='j_spring_security_check' />" method='post'>
+				action="<c:url value='/j_spring_security_check' />" method='post'>
 				<fieldset>
 					<legend>Internet Banking</legend>
 					<c:if test="${not empty error}">

@@ -7,7 +7,7 @@ import com.model.Client;
 import com.model.ClientStatus;
 import com.model.Transaction;
 
-public interface DBService {
+public interface AppService {
 
 	/**
 	 * Find client by login
@@ -34,19 +34,28 @@ public interface DBService {
 	 */
 	public Client findClientByNumber(String number);
 
+    /**
+     * Find last client transactions
+     *
+     * @param number
+     *            - the client number
+     * @param count
+     *            - max transactions count
+     * @return {@link Transaction} list
+     */
+    public List<Transaction> findClientLastTransactions(String number,
+                                                        Integer count);
 	/**
-	 * Find client transactions with the given range
+	 * Find client transactions for page
 	 * 
 	 * @param number
 	 *            - the client number
-	 * @param start
-	 *            - the offset
-	 * @param limit
-	 *            - the number of results returned
+	 * @param page
+	 *            - page number
 	 * @return {@link Transaction} list
 	 */
 	public List<Transaction> findClientTransactions(String number,
-			Integer start, Integer limit);
+			Integer page);
 
 	/**
 	 * Get client transactions count
@@ -54,7 +63,7 @@ public interface DBService {
 	 * @param number
 	 *            - client number
 	 */
-	public Integer getTransactionsCount(String number);
+	public Integer getTransactionsPages(String number);
 
 	/**
 	 * Create new bank transaction
@@ -63,18 +72,16 @@ public interface DBService {
      * @param destination - destination account
      * @param sum - transaction sum
 	 */
-	public void createTransaction(Client source, Client destination, BigDecimal sum);
+	public void createTransaction(String source, String destination, BigDecimal sum);
 
 	/**
 	 * Find bank clients with the given range
 	 * 
-	 * @param start
-	 *            - the offset
-	 * @param limit
-	 *            - the number of results returned
+	 * @param page
+	 *            - clients page
 	 * @return {@link Client} list
 	 */
-	public List<Client> findClients(Integer start, Integer limit);
+	public List<Client> findClients(Integer page);
 
 	/**
 	 * Find client balance
@@ -99,5 +106,5 @@ public interface DBService {
 	/**
 	 * Get clients count
 	 */
-	public Integer getClientsCount();
+	public Integer getAccountsPages();
 }

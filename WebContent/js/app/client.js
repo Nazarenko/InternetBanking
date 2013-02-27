@@ -4,11 +4,11 @@
 
 	var TransactionCollection = Backbone.Collection.extend({
 		model : TransactionModel,
-		url: 'client/ajaxTransactions.html'
+		url: 'transactions'
 	});
 
 	var PagingModel = Backbone.Model.extend({
-		url: 'client/ajaxTransactionsPages.html'
+		url: 'transactionsPages'
 	});
 	
 	// ===================== END MODELS ==================//
@@ -33,7 +33,7 @@
 		render : function() {
 			renderTemplate({
 				selector: this.el, 
-				name: "client_menu",
+				name: "client_menu"
 			});
 		},
 		events : {
@@ -61,12 +61,18 @@
 			var menuView = new TransactionMenuView({el: $("#transactionMenu")});
 			menuView.router = this;
 			menuView.render();
-			
-			this.pagingModel = new PagingModel({});
+			this.pagingModel = new PagingModel();
 			this.pagingView = new PagingView({
 				el: $("#contentFooter"), 
 				model : this.pagingModel
 			});
+            this.transactionCollection = new TransactionCollection();
+            this.transactionsTableView = new TransactionsTableView({
+                el: $("#contentBody"),
+                collection : this.transactionCollection
+            });
+
+            this.addView = new AddTransactionView({el: $("#contentBody")});
 		},
 		
 		routes : {
@@ -75,7 +81,7 @@
 			"addTransaction" : "addTransaction"
 		},
 		
-		// index page presented as firts page of transactions list
+		// index page presented as first page of transactions list
 		index : function() {
 			this.page(1);
 		},
@@ -84,19 +90,15 @@
 		page : function(page) {
 			// updates pagination
 			this.pagingModel.clear({silent : true});
+
 			this.pagingModel.set({cpage : page});
-			this.pagingModel.fetch();
+			this.pagingModel.fetch( { data :{number : this.number}});
 			
 			// shows transaction table
-			var transactionCollection = new TransactionCollection();
-			var transactionsTableView = new TransactionsTableView({
-				el: $("#contentBody"),
-				collection : transactionCollection
-			});
-
-			transactionCollection.fetch({
+			this.transactionCollection.fetch({
 				data : {
-					page : page
+					page : page,
+                    number : this.number
 				}
 			});
 
@@ -104,8 +106,7 @@
 
 		// transaction creation view
 		addTransaction : function() {
-			var addView = new AddTransactionView({el: $("#contentBody")});
-			addView.render();
+			this.addView.render();
 			$("#contentFooter").html('');
 		}
 
