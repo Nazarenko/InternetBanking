@@ -1,0 +1,22 @@
+<h4>Transactions list</h4>
+
+<table class="table table-bordered" width="100%">
+	<thead>
+		<th width="30%">Source account</th>
+		<th width="30%">Destination account</th>
+		<th width="20%">Date</th>
+		<th width="20%">$</th>
+	</thead>
+	<tbody>
+		{{for data}}	
+		<tr>
+			<td>{{:sourceAccount.number}}&nbsp;{{:sourceAccount.firstname}}&nbsp;{{:sourceAccount.lastname}}</td>
+			<td>{{:destinationAccount.number}}&nbsp;{{:destinationAccount.firstname}}
+				&nbsp;{{:destinationAccount.lastname}}</td>
+			<td>{{dateConverter:date}}</td>
+			<td>{{sumConverter:sum}}</td>
+		</tr>
+		{{/for}}
+	</tbody>
+	<tfooter> </tfooter>
+</table>

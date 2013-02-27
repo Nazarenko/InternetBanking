@@ -1,0 +1,19 @@
+<table class="table table-bordered" width="100%">
+	<legend>Accounts</legend>
+	<thead>
+		<th width="35%">Owner name</th>
+		<th width="35%">Account number</th>
+		<th width="30%">Account status</th>
+	</thead>
+	<tbody>
+	{{for accounts}}
+		<tr>
+			<td><a class="btn more-info" number="{{:number}}" title="More info"><i class="icon-user"></i></a>&nbsp;
+			{{:lastname}}&nbsp;{{:firstname}}</td>
+			<td>{{:number}}</td>
+			<td>{{:status}}</td>
+		</tr>
+	{{/for}}
+	</tbody>
+	<tfooter> </tfooter>
+</table>

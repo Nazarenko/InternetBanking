@@ -1,0 +1,22 @@
+{{if pages.length > 1}}
+<div class="pagination pagination-centered">
+	<ul>
+		{{if cpage == 1}}
+		<li class="disabled"><a>Prev</a></li>
+		{{else}}
+		<li> <a href="#page/{{:cpage - 1}}">Prev</a>
+		</li> 
+		{{/if}}
+		{{for pages}} {{if #index+1 == ~root.cpage}}
+		<li class="active">{{else}}
+		<li>{{/if}} <a href="#page/{{:#index+1}}">{{:#index+1}}</a>
+		</li> {{/for}} 
+		{{if pages.length == cpage}}
+		<li class="disabled"><a>Next</a></li>
+		{{else}}
+		<li> <a href="#page/{{:+cpage+1}}">Next</a>
+		</li>
+		{{/if}}
+	</ul>
+</div>
+{{/if}}

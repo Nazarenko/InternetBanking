@@ -1,0 +1,25 @@
+<a class="btn" id="accounts-list">Accounts list</a>
+<table id="accountInfo">
+  <tbody>
+    <tr>
+      <th>Account Name</th>
+      <td>{{:name}}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>Number</th>
+      <td>{{:number}}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>Status</th>
+      <td>{{:status}}</td>
+      <td><button id="action" class="btn {{:settings.cls}}" type="button">{{:settings.title}}</button></td>
+    </tr>
+    <tr>
+      <th>Balance</th>
+      <td>$ {{sumConverter:balance}}</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>

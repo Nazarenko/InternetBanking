@@ -1,0 +1,65 @@
+body {
+	padding: 0px 10px;
+}
+
+.block{
+	border: 2px solid #DDDDDD;
+	border-radius: 6px 6px 6px 6px;
+	box-shadow: 0 0 6px #000000;
+	color: #FFFFFF;
+	font-size: 12px;
+	width: 500px;
+	padding: 4px 10px;
+	margin-bottom:10px;
+	display: block;
+	text-align: center;
+}
+
+.error {
+	background: none repeat scroll 0 0 #EE0101;
+}
+
+.message {
+	background: none repeat scroll 0 0 #33BE40;
+	display: none;
+}
+
+#login-form-div {
+	width: 500px;
+	position: relative;
+	left: 50%;
+	margin-left: -250px
+}
+
+.menu {
+	display: block;
+	margin-left: 10px;
+	padding: 20px;
+	float: left;
+}
+
+.user-info {
+	display: block;
+	margin-right: 10px;
+	padding-bottom: 20px;
+	border-bottom: 1px solid;
+	width: 100%;
+	text-align: right;
+}
+
+a.btn {
+    margin: 10px 5px;
+}
+
+a.btn.more-info {
+    margin: 5px 5px;
+}
+
+table#accountInfo{
+	margin-bottom: 35px;
+}
+
+table#accountInfo td, table#accountInfo th {
+	padding: 3px 20px 3px 5px;
+	text-align: left;
+}
