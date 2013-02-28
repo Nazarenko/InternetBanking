@@ -29,26 +29,7 @@
 <link rel="stylesheet" href="css/validationEngine.jquery.css" type="text/css" />
 <script type="text/javascript">
 
-	// Called before AJAX form validation call
-	function beforeCall(form, options) {
-		$("#message").hide();
-		return true;
-	}
-	// Called once the server replies to the ajax form validation request
-	function ajaxValidationCallback(status, form, json, options) {
-		if (status === true) {
-			$("#message").show();
-			$("#add_transaction").find('input:text').val('');
-		}
-	}
-	function initValidation(){
-		$("#add_transaction").validationEngine({
-			ajaxFormValidation : true,
-			onAjaxFormComplete: ajaxValidationCallback,
-			onBeforeAjaxFormValidation: beforeCall
-		});
 
-	}
 	$(function() {
 		var clientRouter = new ClientRouter();
         clientRouter.number = ${number};

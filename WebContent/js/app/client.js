@@ -1,6 +1,8 @@
 	// ===================== MODELS ==================//
 
-	var TransactionModel = Backbone.Model.extend({});
+	var TransactionModel = Backbone.Model.extend({
+        urlRoot: "transaction"
+    });
 
 	var TransactionCollection = Backbone.Collection.extend({
 		model : TransactionModel,
@@ -17,14 +19,47 @@
 	
 	// Form for creating new transaction
 	var AddTransactionView = Backbone.View.extend({
+        events : {
+            "submit #add_transaction" : "submit",
+            "click .close" : "closeAlert"
+        },
 		render : function() {
 			renderTemplate({
 				selector:this.el, 
 				name: "transaction_add",
 				// turns on form validation after template load
-				callback: initValidation
+				callback: this.initValidation
 			});
-		}
+		},
+        initValidation : function(){
+            $("#add_transaction").validationEngine({});
+            $("#error").hide();
+            $("#success").hide();
+        },
+        submit : function() {
+            this.model.set({
+                destination : this.$('#number').val(),
+                sum : this.$('#sum').val()
+            })
+            var self = this;
+            this.model.save(null,
+                {
+                    success: function (model, response) {
+                        self.$('#success').show();
+                    },
+                    error: function (model, response) {
+                        self.$('#error > .message').text(response.responseText);
+                        self.$('#error').show();
+                    }
+                }
+            );
+            return false;
+        },
+
+        closeAlert : function(e) {
+             $(e.target).parent().hide();
+        }
+
 	});
 	
 	// Client menu for switching between list and transaction creation
@@ -72,7 +107,8 @@
                 collection : this.transactionCollection
             });
 
-            this.addView = new AddTransactionView({el: $("#contentBody")});
+            this.transactionModel = new TransactionModel();
+            this.addView = new AddTransactionView({el: $("#contentBody"), model: this.transactionModel});
 		},
 		
 		routes : {
@@ -106,6 +142,7 @@
 
 		// transaction creation view
 		addTransaction : function() {
+            this.transactionModel.set({source : this.number});
 			this.addView.render();
 			$("#contentFooter").html('');
 		}

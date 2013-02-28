@@ -19,10 +19,6 @@ body {
 	background: none repeat scroll 0 0 #EE0101;
 }
 
-.message {
-	background: none repeat scroll 0 0 #33BE40;
-	display: none;
-}
 
 #login-form-div {
 	width: 500px;

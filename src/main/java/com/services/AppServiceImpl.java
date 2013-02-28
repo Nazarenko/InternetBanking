@@ -3,6 +3,7 @@ package com.services;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.exceptions.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -82,41 +83,36 @@ public class AppServiceImpl implements AppService {
 
 	@Override
 	public void createTransaction(String source, String destination, BigDecimal sum) {
-//         TODO exception handler
-//        // destination account check
-//        Client clientDestination = clientDao.findByNumber(destination);
-//        if (clientDestination == null) {
-//            error.addAttribute("message", "Destination account is not found");
-//            return  error;
-//        }
-//        if (!clientDestination.getStatus().equals(ClientStatus.ACTIVE)) {
-//            error.addAttribute("message", "Destination account is not active");
-//            return  error;
-//        }
-//
-//        // source account and balance check
-//        Client clientSource = clientDao.findByNumber(source);
-//        if (!clientSource.getStatus().equals(ClientStatus.ACTIVE)) {
-//            error.addAttribute("message", "Your account is not active");
-//            return  error;
-//        }
-//        BigDecimal currentSum = clientDao.findClientSum(clientSource.getId());
-//        if (currentSum.compareTo(sum) == -1) {
-//            error.addAttribute("message", "You don't have enough money");
-//            return  error;
-//        }
-//
-//
-//        Transaction transaction = new Transaction();
-//        transaction.setSourceAccount(clientSource);
-//        transaction.setDestinationAccount(clientDestination);
-//        transaction.setSum(sum);
-//		transactionDao.createTransaction(transaction);
-//
-//		clientDao.updateBalance(clientSource.getId(),
-//				transaction.getSum().negate());
-//		clientDao.updateBalance(clientDestination.getId(),
-//				transaction.getSum());
+        // destination account check
+        Client clientDestination = clientDao.findByNumber(destination);
+        if (clientDestination == null) {
+            throw new ServiceException("Destination account is not found");
+        }
+        if (!clientDestination.getStatus().equals(ClientStatus.ACTIVE)) {
+            throw new ServiceException("Destination account is not active");
+        }
+
+        // source account and balance check
+        Client clientSource = clientDao.findByNumber(source);
+        if (!clientSource.getStatus().equals(ClientStatus.ACTIVE)) {
+            throw new ServiceException("Your account is not active");
+        }
+        BigDecimal currentSum = clientDao.findClientSum(clientSource.getId());
+        if (currentSum.compareTo(sum) == -1) {
+            throw new ServiceException("You don't have enough money");
+        }
+
+
+        Transaction transaction = new Transaction();
+        transaction.setSourceAccount(clientSource);
+        transaction.setDestinationAccount(clientDestination);
+        transaction.setSum(sum);
+		transactionDao.createTransaction(transaction);
+
+		clientDao.updateBalance(clientSource.getId(),
+				transaction.getSum().negate());
+		clientDao.updateBalance(clientDestination.getId(),
+				transaction.getSum());
 	}
 
 	@Override
