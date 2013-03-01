@@ -3,6 +3,7 @@ package com.services;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.exceptions.NotFoundException;
 import com.exceptions.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import com.dao.TransactionDao;
 import com.model.Client;
 import com.model.ClientStatus;
 import com.model.Transaction;
+import org.springframework.validation.Validator;
 
 @Service
 @Transactional
@@ -21,14 +23,15 @@ public class AppServiceImpl implements AppService {
     private static int ACCOUNTS_PER_PAGE = 10;
     private static int TRANSACTIONS_PER_PAGE = 10;
 
+    @Autowired
 	private ClientDao clientDao;
+    @Autowired
 	private TransactionDao transactionDao;
 
 	public ClientDao getClientDao() {
 		return clientDao;
 	}
 
-	@Autowired
 	public void setClientDao(ClientDao clientDao) {
 		this.clientDao = clientDao;
 	}
@@ -37,7 +40,6 @@ public class AppServiceImpl implements AppService {
 		return transactionDao;
 	}
 
-	@Autowired
 	public void setTransactionDao(TransactionDao transactionDao) {
 		this.transactionDao = transactionDao;
 	}
@@ -54,8 +56,24 @@ public class AppServiceImpl implements AppService {
 
 	@Override
 	public Client findClientByNumber(String number) {
-		return clientDao.findByNumber(number);
+        Client client = clientDao.findByNumber(number);
+        if (client == null) {
+            throw new NotFoundException("Account is not found");
+        }
+        return client;
 	}
+
+    @Override
+    public Client findActiveClient(String number) {
+        Client client = clientDao.findByNumber(number);
+        if (client == null) {
+            throw new NotFoundException("Account is not found");
+        }
+        if (!client.getStatus().equals(ClientStatus.ACTIVE)) {
+            throw new ServiceException("Account is not active");
+        }
+        return client;
+    }
 
     @Override
     public List<Transaction> findClientLastTransactions(String number,
@@ -86,7 +104,7 @@ public class AppServiceImpl implements AppService {
         // destination account check
         Client clientDestination = clientDao.findByNumber(destination);
         if (clientDestination == null) {
-            throw new ServiceException("Destination account is not found");
+            throw new NotFoundException("Destination account is not found");
         }
         if (!clientDestination.getStatus().equals(ClientStatus.ACTIVE)) {
             throw new ServiceException("Destination account is not active");
@@ -101,7 +119,6 @@ public class AppServiceImpl implements AppService {
         if (currentSum.compareTo(sum) == -1) {
             throw new ServiceException("You don't have enough money");
         }
-
 
         Transaction transaction = new Transaction();
         transaction.setSourceAccount(clientSource);

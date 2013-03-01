@@ -1,19 +1,20 @@
 package com.controllers;
 
+import com.exceptions.NotFoundException;
 import com.exceptions.ServiceException;
-import com.model.Client;
-import com.model.ClientStatus;
 import com.model.Transaction;
+import com.model.TransactionForm;
 import com.services.AppService;
+import com.validators.TransactionFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -27,6 +28,8 @@ import java.util.List;
 public class TransactionRestController {
 
     @Autowired
+    private TransactionFormValidator transactionFormValidator;
+    @Autowired
     private AppService appService;
 
     public AppService getDbService() {
@@ -37,10 +40,19 @@ public class TransactionRestController {
         this.appService = appService;
     }
 
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public
+    @ResponseBody
+    String handleServiceException(NotFoundException ex) {
+        return ex.getMessage();
+    }
+
     @ExceptionHandler(ServiceException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public @ResponseBody String handleServiceException(ServiceException ex)
-    {
+    public
+    @ResponseBody
+    String handleServiceException(ServiceException ex) {
         return ex.getMessage();
 //        ModelAndView modelAndView = new ModelAndView("error");
 //        modelAndView.addObject("error", ex.getMessage());
@@ -53,41 +65,48 @@ public class TransactionRestController {
     /**
      * Creates transaction from ajax request
      *
-     * @param body
-     *            - json data
+     * @param transaction - json data
      * @return list of errors for validation if failed, otherwise empty list
      */
     @RequestMapping(value = "transaction", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody
-    ModelMap createTransaction(@RequestBody ModelMap body) {
+    public
+    @ResponseBody
+    ModelMap createTransaction(@Valid @RequestBody TransactionForm transaction) {
 
+//        transactionFormValidator.validate(transaction,result);
+//        if (result.hasErrors()) {
+//            throw new ServiceException("You cannot transfer money to yourself");
+//        }
         appService.createTransaction(
-                body.get("source").toString(),
-                body.get("destination").toString(),
-                new BigDecimal((String)body.get("sum")));
+                transaction.getSource(),
+                transaction.getDestination(),
+                transaction.getSum());
 
         return new ModelMap("result", "success");
     }
 
     /**
      * Returns last transactions for user
+     *
      * @param number - account number
      */
     @RequestMapping(value = "/transactionsLast", method = RequestMethod.GET)
-    public @ResponseBody
+    public
+    @ResponseBody
     List<Transaction> transactionsLast(@RequestParam String number) {
         return appService.findClientLastTransactions(number, 5);
     }
 
     /**
      * Returns transactions list for user
+     *
      * @param number - account number
-     * @param page
-     *            - page number of pagination
+     * @param page   - page number of pagination
      */
     @RequestMapping(value = "/transactions", method = RequestMethod.GET)
-    public @ResponseBody
+    public
+    @ResponseBody
     List<Transaction> transactionsList(@RequestParam String number,
                                        @RequestParam(required = false, defaultValue = "1") int page) {
         return appService.findClientTransactions(number, page);
@@ -96,10 +115,12 @@ public class TransactionRestController {
 
     /**
      * Returns pages count of transactions list for  user
+     *
      * @param number - account number
      */
     @RequestMapping(value = "/transactionsPages", method = RequestMethod.GET)
-    public @ResponseBody
+    public
+    @ResponseBody
     ModelMap transactionsPages(@RequestParam String number) {
 
         ModelMap model = new ModelMap();

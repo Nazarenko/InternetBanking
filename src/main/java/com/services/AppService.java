@@ -35,6 +35,13 @@ public interface AppService {
 	public Client findClientByNumber(String number);
 
     /**
+     * Find active client
+     * @param number - client number
+     * @return {@Link Client}
+     */
+    public Client findActiveClient(String number);
+
+    /**
      * Find last client transactions
      *
      * @param number

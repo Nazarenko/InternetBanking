@@ -22,6 +22,15 @@
 					<warSourceDirectory>WebContent</warSourceDirectory>
 				</configuration>
 			</plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                    <compilerArgument></compilerArgument>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
 
@@ -83,8 +92,16 @@
 			<artifactId>spring-security-acl</artifactId>
 			<version>${spring-version}</version>
 		</dependency>
-		<!-- jstl -->
 
+        <!-- validation -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>4.3.1.Final</version>
+        </dependency>
+
+
+        <!-- jstl -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
@@ -115,5 +132,17 @@
 			<version>1.9.12</version>
 		</dependency>
 
-	</dependencies>
+        <!-- TESTS -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.9.5</version>
+        </dependency>
+
+    </dependencies>
 </project>

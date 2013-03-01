@@ -1,10 +1,13 @@
 package com.controllers;
 
+import com.exceptions.NotFoundException;
+import com.exceptions.ServiceException;
 import com.model.Client;
 import com.model.ClientStatus;
 import com.model.Transaction;
 import com.services.AppService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +33,20 @@ public class AccountRestController {
 
     public void setDbService(AppService appService) {
         this.appService = appService;
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public @ResponseBody String handleServiceException(NotFoundException ex)
+    {
+        return ex.getMessage();
+    }
+
+    @ExceptionHandler(ServiceException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public @ResponseBody String handleServiceException(ServiceException ex)
+    {
+        return ex.getMessage();
     }
 
     /**
@@ -75,6 +92,24 @@ public class AccountRestController {
         model.addAttribute("number", client.getNumber());
         model.addAttribute("status", client.getStatus());
         model.addAttribute("balance", balance);
+        return model;
+    }
+
+    /**
+     * Gets active client
+     *
+     * @param number
+     *            - account number
+     */
+    @RequestMapping(value = "/accountActive/{number}", method = RequestMethod.GET)
+    public @ResponseBody
+    ModelMap accountActive(@PathVariable String number) {
+        Client client = appService.findActiveClient(number);
+        ModelMap model = new ModelMap();
+        model.addAttribute("name",
+                client.getFirstname() + " " + client.getLastname());
+        model.addAttribute("number", client.getNumber());
+        model.addAttribute("status", client.getStatus());
         return model;
     }
 

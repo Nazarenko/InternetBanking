@@ -45,9 +45,11 @@
             this.model.save(null,
                 {
                     success: function (model, response) {
+                        self.$('#error').hide();
                         self.$('#success').show();
                     },
                     error: function (model, response) {
+                        self.$('#success').hide();
                         self.$('#error > .message').text(response.responseText);
                         self.$('#error').show();
                     }

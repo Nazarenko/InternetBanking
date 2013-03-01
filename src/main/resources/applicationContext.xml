@@ -24,6 +24,8 @@
 	<!-- Initialization for data source -->
 	<context:property-placeholder location="classpath:application.properties" />
 
+    <bean id="validatorTransaction" class="com.validators.TransactionFormValidator" />
+
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="${db.driver}" />
