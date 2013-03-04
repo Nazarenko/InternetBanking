@@ -3,12 +3,13 @@ package com.unit.tests;
 import com.dao.impl.ClientJDBCDaoImpl;
 import com.dao.impl.TransactionJDBCDaoImpl;
 import com.exceptions.NotFoundException;
-import com.exceptions.ServiceException;
+import com.exceptions.DataException;
 import com.model.Client;
 import com.model.ClientStatus;
 import com.services.AppServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -25,6 +26,7 @@ import static org.mockito.Mockito.when;
  */
 public class TransactionServiceTest {
 
+    @InjectMocks
     AppServiceImpl appService;
     @Mock
     TransactionJDBCDaoImpl transactionDao;
@@ -33,11 +35,7 @@ public class TransactionServiceTest {
 
     @Before
     public void setup() {
-        // this must be called for the @Mock annotations above to be processed.
         MockitoAnnotations.initMocks(this);
-        appService = new AppServiceImpl();
-        appService.setTransactionDao(transactionDao);
-        appService.setClientDao(clientDao);
     }
 
     @Test
@@ -54,44 +52,49 @@ public class TransactionServiceTest {
         when(clientDao.findByNumber("active")).thenReturn(clientActive);
         when(clientDao.findClientSum(1)).thenReturn(new BigDecimal(1000));
 
+        String errorDestinationNotFound = "Destination account is not found";
+        String errorDestinationNotActive = "Destination account is not active";
+        String errorSourceNotActive = "Your account is not active";
+        String errorNoMoney = "You don't have enough money";
+
         // check destination account
         try {
             appService.createTransaction("active", "not exist", BigDecimal.ZERO);
             assertTrue("Destination account should not be found", false);
         } catch (NotFoundException e) {
-            assertTrue(e.getMessage().equals("Destination account is not found"));
+            assertTrue(e.getMessage().equals(errorDestinationNotFound));
         }
         try {
             appService.createTransaction("active", "blocked", BigDecimal.ZERO);
             assertTrue("Destination account should not be active", false);
-        } catch (ServiceException e) {
-            assertTrue(e.getMessage().equals("Destination account is not active"));
+        } catch (DataException e) {
+            assertTrue(e.getMessage().equals(errorDestinationNotActive));
         }
         try {
             appService.createTransaction("active", "new", BigDecimal.ZERO);
             assertTrue("Destination account should not be active", false);
-        } catch (ServiceException e) {
-            assertTrue(e.getMessage().equals("Destination account is not active"));
+        } catch (DataException e) {
+            assertTrue(e.getMessage().equals(errorDestinationNotActive));
         }
 
         // check source account
         try {
             appService.createTransaction("new", "active", BigDecimal.ZERO);
             assertTrue("Source account should not be active", false);
-        } catch (ServiceException e) {
-            assertTrue(e.getMessage().equals("Your account is not active"));
+        } catch (DataException e) {
+            assertTrue(e.getMessage().equals(errorSourceNotActive));
         }
         try {
             appService.createTransaction("blocked", "active", BigDecimal.ZERO);
             assertTrue("Source account should not be active", false);
-        } catch (ServiceException e) {
-            assertTrue(e.getMessage().equals("Your account is not active"));
+        } catch (DataException e) {
+            assertTrue(e.getMessage().equals(errorSourceNotActive));
         }
         try {
             appService.createTransaction("active", "active", new BigDecimal(2000));
             assertTrue("Source account should not have money", false);
-        } catch (ServiceException e) {
-            assertTrue(e.getMessage().equals("You don't have enough money"));
+        } catch (DataException e) {
+            assertTrue(e.getMessage().equals(errorNoMoney));
         }
 
         // successful result

@@ -27,17 +27,20 @@
 			renderTemplate({
 				selector:this.el, 
 				name: "transaction_add",
+                data : this.model.toJSON(),
 				// turns on form validation after template load
 				callback: this.initValidation
 			});
 		},
         initValidation : function(){
-            $("#add_transaction").validationEngine({});
+            $("#add_transaction").validationEngine();
             $("#error").hide();
             $("#success").hide();
         },
         submit : function() {
+
             this.model.set({
+                source : this.model.source,
                 destination : this.$('#number').val(),
                 sum : this.$('#sum').val()
             })
@@ -47,10 +50,16 @@
                     success: function (model, response) {
                         self.$('#error').hide();
                         self.$('#success').show();
+                        self.model.clear();
+                        $(self.el).find('input[type=text]').val('');
                     },
                     error: function (model, response) {
+                        var errorText = JSON.parse(response.responseText).error;
+                        if (errorText === undefined) {
+                           errorText = "Unexpected error";
+                        }
                         self.$('#success').hide();
-                        self.$('#error > .message').text(response.responseText);
+                        self.$('#error > .message').text(errorText);
                         self.$('#error').show();
                     }
                 }
@@ -144,7 +153,7 @@
 
 		// transaction creation view
 		addTransaction : function() {
-            this.transactionModel.set({source : this.number});
+            this.transactionModel.source = this.number;
 			this.addView.render();
 			$("#contentFooter").html('');
 		}

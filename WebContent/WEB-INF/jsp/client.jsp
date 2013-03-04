@@ -35,6 +35,29 @@
         clientRouter.number = ${number};
 		Backbone.history.start();
 	});
+
+    function checkDestinationAccount(field, rules, i, options) {
+        if (!options.isError) {
+            if (this.number != field.val()) {
+                this.number = field.val();
+                var self = this;
+                jQuery.ajax({
+                    url: "accountActive/" + self.number,
+                    success: function(response) {
+                        self.error = null;
+                    },
+                    error: function(response) {
+                        self.error = "* " + JSON.parse(response.responseText).error;
+                    },
+                    async:false
+                });
+            }
+            if (this.error !== null) {
+                return this.error;
+            }
+        }
+    }
+
 </script>
 
 

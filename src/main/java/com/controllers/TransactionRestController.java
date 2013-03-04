@@ -1,7 +1,7 @@
 package com.controllers;
 
+import com.exceptions.DataException;
 import com.exceptions.NotFoundException;
-import com.exceptions.ServiceException;
 import com.model.Transaction;
 import com.model.TransactionForm;
 import com.services.AppService;
@@ -10,12 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -44,16 +41,16 @@ public class TransactionRestController {
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public
     @ResponseBody
-    String handleServiceException(NotFoundException ex) {
-        return ex.getMessage();
+    ModelMap handleServiceException(NotFoundException ex) {
+        return new ModelMap("error", ex.getMessage());
     }
 
-    @ExceptionHandler(ServiceException.class)
+    @ExceptionHandler(DataException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public
     @ResponseBody
-    String handleServiceException(ServiceException ex) {
-        return ex.getMessage();
+    ModelMap handleServiceException(DataException ex) {
+        return new ModelMap("error", ex.getMessage());
 //        ModelAndView modelAndView = new ModelAndView("error");
 //        modelAndView.addObject("error", ex.getMessage());
 //        return modelAndView;
@@ -74,10 +71,10 @@ public class TransactionRestController {
     @ResponseBody
     ModelMap createTransaction(@Valid @RequestBody TransactionForm transaction) {
 
-//        transactionFormValidator.validate(transaction,result);
-//        if (result.hasErrors()) {
-//            throw new ServiceException("You cannot transfer money to yourself");
-//        }
+        if (transaction.getDestination().equals(transaction.getSource())) {
+            throw new DataException("You cannot transfer money to your account");
+        }
+
         appService.createTransaction(
                 transaction.getSource(),
                 transaction.getDestination(),

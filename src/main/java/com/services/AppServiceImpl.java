@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.exceptions.NotFoundException;
-import com.exceptions.ServiceException;
+import com.exceptions.DataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,7 +70,7 @@ public class AppServiceImpl implements AppService {
             throw new NotFoundException("Account is not found");
         }
         if (!client.getStatus().equals(ClientStatus.ACTIVE)) {
-            throw new ServiceException("Account is not active");
+            throw new DataException("Account is not active");
         }
         return client;
     }
@@ -107,17 +107,17 @@ public class AppServiceImpl implements AppService {
             throw new NotFoundException("Destination account is not found");
         }
         if (!clientDestination.getStatus().equals(ClientStatus.ACTIVE)) {
-            throw new ServiceException("Destination account is not active");
+            throw new DataException("Destination account is not active");
         }
 
         // source account and balance check
         Client clientSource = clientDao.findByNumber(source);
         if (!clientSource.getStatus().equals(ClientStatus.ACTIVE)) {
-            throw new ServiceException("Your account is not active");
+            throw new DataException("Your account is not active");
         }
         BigDecimal currentSum = clientDao.findClientSum(clientSource.getId());
         if (currentSum.compareTo(sum) == -1) {
-            throw new ServiceException("You don't have enough money");
+            throw new DataException("You don't have enough money");
         }
 
         Transaction transaction = new Transaction();

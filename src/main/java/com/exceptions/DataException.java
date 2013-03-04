@@ -6,9 +6,9 @@ package com.exceptions;
  * Date: 2/27/13
  * Time: 1:07 PM
  */
-public class ServiceException extends RuntimeException {
+public class DataException extends RuntimeException {
 
-    public ServiceException(String message) {
+    public DataException(String message) {
         super(message);
     }
 }

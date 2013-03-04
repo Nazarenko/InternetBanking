@@ -1,10 +1,9 @@
 package com.controllers;
 
+import com.exceptions.DataException;
 import com.exceptions.NotFoundException;
-import com.exceptions.ServiceException;
 import com.model.Client;
 import com.model.ClientStatus;
-import com.model.Transaction;
 import com.services.AppService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,27 +36,29 @@ public class AccountRestController {
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public @ResponseBody String handleServiceException(NotFoundException ex)
-    {
-        return ex.getMessage();
+    public
+    @ResponseBody
+    ModelMap handleServiceException(NotFoundException ex) {
+        return new ModelMap("error", ex.getMessage());
     }
 
-    @ExceptionHandler(ServiceException.class)
+    @ExceptionHandler(DataException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public @ResponseBody String handleServiceException(ServiceException ex)
-    {
-        return ex.getMessage();
+    public
+    @ResponseBody
+    ModelMap handleServiceException(DataException ex) {
+        return new ModelMap("error", ex.getMessage());
     }
 
     /**
      * Gets list of accounts
      *
-     * @param page
-     *            - page number of pagination
+     * @param page - page number of pagination
      * @return accounts list
      */
     @RequestMapping(value = "/accounts", method = RequestMethod.GET)
-    public @ResponseBody
+    public
+    @ResponseBody
     List<Client> accountsList(
             @RequestParam(required = false, defaultValue = "1") int page) {
         return appService.findClients(page);
@@ -67,7 +68,8 @@ public class AccountRestController {
      * Returns pages count of accounts list
      */
     @RequestMapping(value = "/accountsPages", method = RequestMethod.GET)
-    public @ResponseBody
+    public
+    @ResponseBody
     ModelMap accountsPages() {
         ModelMap model = new ModelMap();
         Integer pages = appService.getAccountsPages();
@@ -78,11 +80,11 @@ public class AccountRestController {
     /**
      * Gets client full information including balance
      *
-     * @param number
-     *            - account number
+     * @param number - account number
      */
     @RequestMapping(value = "/account/{number}", method = RequestMethod.GET)
-    public @ResponseBody
+    public
+    @ResponseBody
     ModelMap accountDetails(@PathVariable String number) {
         Client client = appService.findClientByNumber(number);
         BigDecimal balance = appService.findClientSum(client.getId());
@@ -98,11 +100,11 @@ public class AccountRestController {
     /**
      * Gets active client
      *
-     * @param number
-     *            - account number
+     * @param number - account number
      */
     @RequestMapping(value = "/accountActive/{number}", method = RequestMethod.GET)
-    public @ResponseBody
+    public
+    @ResponseBody
     ModelMap accountActive(@PathVariable String number) {
         Client client = appService.findActiveClient(number);
         ModelMap model = new ModelMap();
@@ -116,14 +118,13 @@ public class AccountRestController {
     /**
      * Switches client status to status available for change
      *
-     * @param number
-     *            - account number
-     * @param currentStatus
-     *            - current account status
+     * @param number        - account number
+     * @param currentStatus - current account status
      * @return new client status
      */
     @RequestMapping(value = "/accountUpdateStatus", method = RequestMethod.POST)
-    public @ResponseBody
+    public
+    @ResponseBody
     ModelMap updateAccountStatus(@RequestParam String number,
                                  @RequestParam("status") ClientStatus currentStatus) {
         ClientStatus nextStatus = appService.updateClientStatus(number, currentStatus);
