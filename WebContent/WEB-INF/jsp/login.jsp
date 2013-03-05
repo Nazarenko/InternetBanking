@@ -9,13 +9,13 @@
 <meta lang="en" />
 <meta charset="UTF-8" />
 <title>Login Page</title>
-<link rel="stylesheet" href="css/style.css" type="text/css" />
-<link rel="stylesheet" href="css/validationEngine.jquery.css" type="text/css" />
-<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
-<script src="js/libs/jquery-1.9.1.min.js" type="text/javascript"></script>
-<script src="js/libs/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="js/libs/jquery.validationEngine-en.js" type="text/javascript"></script>
-<script src="js/libs/jquery.validationEngine.js" type="text/javascript"></script>
+<link rel="stylesheet" href="resources/css/style.css" type="text/css" />
+<link rel="stylesheet" href="resources/css/validationEngine.jquery.css" type="text/css" />
+<link rel="stylesheet" href="resources/css/bootstrap.min.css" type="text/css" />
+<script src="resources/js/libs/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="resources/js/libs/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="resources/js/libs/jquery.validationEngine-en.js" type="text/javascript"></script>
+<script src="resources/js/libs/jquery.validationEngine.js" type="text/javascript"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$("#login-form").validationEngine();

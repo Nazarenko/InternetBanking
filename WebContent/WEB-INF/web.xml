@@ -5,7 +5,7 @@
 	id="WebApp_ID" version="3.0">
 	<display-name>InternetBankingProject</display-name>
 	<welcome-file-list>
-		<welcome-file>app/login.html</welcome-file>
+		<welcome-file>app/login</welcome-file>
 	</welcome-file-list>
 	<servlet>
 		<servlet-name>dispatcher</servlet-name>

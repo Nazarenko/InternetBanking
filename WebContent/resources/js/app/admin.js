@@ -5,11 +5,11 @@
 	// Data for accounts table rows
 	var AccountsCollection = Backbone.Collection.extend({
 		model : AccountModel,
-		url : 'accounts.html'
+		url : 'accounts'
 	});
 	
 	var PagingModel = Backbone.Model.extend({
-		url: 'accountsPages.html'
+		url: 'accountsPages'
 	});
 	
 	var TransactionCollection = Backbone.Collection.extend({

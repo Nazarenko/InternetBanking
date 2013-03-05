@@ -7,26 +7,26 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 <title>Client Page</title>
-<script src="js/libs/json2.js" type="text/javascript" charset="utf-8"></script>
-<script src="js/libs/jquery-1.9.1.min.js" type="text/javascript"></script>
-<script src="js/libs/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="js/libs/underscore.js" type="text/javascript" charset="utf-8"></script>
-<script src="js/libs/jsrender.js" type="text/javascript" charset="utf-8"></script>
-<script src="js/libs/backbone.js" type="text/javascript" charset="utf-8"></script>
-<script src="js/libs/jquery.validationEngine-en.js" type="text/javascript"></script>
-<script src="js/libs/jquery.validationEngine.js" type="text/javascript"></script>
+<script src="resources/js/libs/json2.js" type="text/javascript" charset="utf-8"></script>
+<script src="resources/js/libs/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="resources/js/libs/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="resources/js/libs/underscore.js" type="text/javascript" charset="utf-8"></script>
+<script src="resources/js/libs/jsrender.js" type="text/javascript" charset="utf-8"></script>
+<script src="resources/js/libs/backbone.js" type="text/javascript" charset="utf-8"></script>
+<script src="resources/js/libs/jquery.validationEngine-en.js" type="text/javascript"></script>
+<script src="resources/js/libs/jquery.validationEngine.js" type="text/javascript"></script>
 
 <!-- APP -->
-<script src="js/app/scripts.js" type="text/javascript" charset="utf-8"></script>
-<script src="js/app/paginator.js" type="text/javascript" charset="utf-8"></script>
-<script src="js/app/transactions.js" type="text/javascript" charset="utf-8"></script>
-<script src="js/app/client.js" type="text/javascript" charset="utf-8"></script>
+<script src="resources/js/app/scripts.js" type="text/javascript" charset="utf-8"></script>
+<script src="resources/js/app/paginator.js" type="text/javascript" charset="utf-8"></script>
+<script src="resources/js/app/transactions.js" type="text/javascript" charset="utf-8"></script>
+<script src="resources/js/app/client.js" type="text/javascript" charset="utf-8"></script>
 <!--  -->
 
-<link rel="stylesheet" href="css/style.css" type="text/css" />
-<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
-<link rel="stylesheet" href="css/bootstrap-responsive.min.css" type="text/css" />
-<link rel="stylesheet" href="css/validationEngine.jquery.css" type="text/css" />
+<link rel="stylesheet" href="resources/css/style.css" type="text/css" />
+<link rel="stylesheet" href="resources/css/bootstrap.min.css" type="text/css" />
+<link rel="stylesheet" href="resources/css/bootstrap-responsive.min.css" type="text/css" />
+<link rel="stylesheet" href="resources/css/validationEngine.jquery.css" type="text/css" />
 <script type="text/javascript">
 
 

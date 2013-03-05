@@ -2,28 +2,28 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!DOCTYPE html">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 <title>Employee page</title>
-<script src="js/libs/json2.js" type="text/javascript" charset="utf-8"></script>
-<script src="js/libs/jquery-1.9.1.min.js" type="text/javascript"></script>
-<script src="js/libs/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="js/libs/underscore.js" type="text/javascript" charset="utf-8"></script>
-<script src="js/libs/jsrender.js" type="text/javascript" charset="utf-8"></script>
-<script src="js/libs/backbone.js" type="text/javascript" charset="utf-8"></script>
+<script src="resources/js/libs/json2.js" type="text/javascript" charset="utf-8"></script>
+<script src="resources/js/libs/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="resources/js/libs/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="resources/js/libs/underscore.js" type="text/javascript" charset="utf-8"></script>
+<script src="resources/js/libs/jsrender.js" type="text/javascript" charset="utf-8"></script>
+<script src="resources/js/libs/backbone.js" type="text/javascript" charset="utf-8"></script>
 
 <!-- APP -->
-<script src="js/app/scripts.js" type="text/javascript" charset="utf-8"></script>
-<script src="js/app/transactions.js" type="text/javascript" charset="utf-8"></script>
-<script src="js/app/paginator.js" type="text/javascript" charset="utf-8"></script>
-<script src="js/app/admin.js" type="text/javascript" charset="utf-8"></script>
+<script src="resources/js/app/scripts.js" type="text/javascript" charset="utf-8"></script>
+<script src="resources/js/app/transactions.js" type="text/javascript" charset="utf-8"></script>
+<script src="resources/js/app/paginator.js" type="text/javascript" charset="utf-8"></script>
+<script src="resources/js/app/admin.js" type="text/javascript" charset="utf-8"></script>
 <!--  -->
 
-<link rel="stylesheet" href="css/style.css" type="text/css" />
-<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
-<link rel="stylesheet" href="css/bootstrap-responsive.min.css" type="text/css" />
+<link rel="stylesheet" href="resources/css/style.css" type="text/css" />
+<link rel="stylesheet" href="resources/css/bootstrap.min.css" type="text/css" />
+<link rel="stylesheet" href="resources/css/bootstrap-responsive.min.css" type="text/css" />
 
 <script type="text/javascript">
 	$(function() {

@@ -14,15 +14,20 @@ http://www.springframework.org/schema/security/spring-security-3.1.xsd'>
 		<beans:property name="adminUrl" value="/app/admin" />
 		<beans:property name="userUrl" value="/app/client" />
 	</beans:bean>
-	
-	<http>
-		<intercept-url pattern='/app/client*' access='ROLE_USER' />
-		<intercept-url pattern='/app/admin*' access='ROLE_ADMIN' />
+
+    <http pattern="/"  security="none"></http>
+    <http pattern="/app/login*"  security="none"></http>
+    <http pattern="/app/resources/**"  security="none"></http>
+
+	<http use-expressions="true">
+        <intercept-url pattern="/app/login"  access="permitAll" />
+		<intercept-url pattern='/app/client*' access='hasRole("ROLE_USER")' />
+		<intercept-url pattern='/app/admin*' access='hasRole("ROLE_ADMIN")' />
+        <intercept-url pattern="/app/**" access="isAuthenticated()" />
 		<form-login login-page='/app/login'
 			authentication-success-handler-ref="redirectHandler"
 			authentication-failure-url='/app/login?error=true' />
 		<logout logout-success-url='/app/login' />
-		<!-- <anonymous username='guest' granted-authority='ROLE_GUEST' /> -->
 		<remember-me />
 	</http>
 
