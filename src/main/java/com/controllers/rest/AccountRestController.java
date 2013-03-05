@@ -1,4 +1,4 @@
-package com.controllers;
+package com.controllers.rest;
 
 import com.exceptions.DataException;
 import com.exceptions.NotFoundException;
@@ -21,7 +21,7 @@ import java.util.List;
  * Time: 11:42 AM
  */
 @Controller
-public class AccountRestController {
+public class AccountRestController extends ExceptionHandlerRestController {
 
     @Autowired
     private AppService appService;
@@ -32,22 +32,6 @@ public class AccountRestController {
 
     public void setDbService(AppService appService) {
         this.appService = appService;
-    }
-
-    @ExceptionHandler(NotFoundException.class)
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public
-    @ResponseBody
-    ModelMap handleServiceException(NotFoundException ex) {
-        return new ModelMap("error", ex.getMessage());
-    }
-
-    @ExceptionHandler(DataException.class)
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public
-    @ResponseBody
-    ModelMap handleServiceException(DataException ex) {
-        return new ModelMap("error", ex.getMessage());
     }
 
     /**

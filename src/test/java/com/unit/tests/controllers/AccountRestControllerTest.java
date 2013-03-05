@@ -1,6 +1,6 @@
-package com.unit.tests;
+package com.unit.tests.controllers;
 
-import com.controllers.AccountRestController;
+import com.controllers.rest.AccountRestController;
 import com.exceptions.DataException;
 import com.exceptions.NotFoundException;
 import com.model.Client;

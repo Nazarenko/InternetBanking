@@ -1,4 +1,4 @@
-package com.unit.tests;
+package com.unit.tests.services;
 
 import com.dao.impl.ClientJDBCDaoImpl;
 import com.dao.impl.TransactionJDBCDaoImpl;

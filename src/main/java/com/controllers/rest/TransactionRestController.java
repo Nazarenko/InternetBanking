@@ -1,11 +1,9 @@
-package com.controllers;
+package com.controllers.rest;
 
 import com.exceptions.DataException;
-import com.exceptions.NotFoundException;
 import com.model.Transaction;
 import com.model.TransactionForm;
 import com.services.AppService;
-import com.validators.TransactionFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -22,10 +20,8 @@ import java.util.List;
  * Time: 11:42 AM
  */
 @Controller
-public class TransactionRestController {
+public class TransactionRestController extends ExceptionHandlerRestController {
 
-    @Autowired
-    private TransactionFormValidator transactionFormValidator;
     @Autowired
     private AppService appService;
 
@@ -35,28 +31,6 @@ public class TransactionRestController {
 
     public void setDbService(AppService appService) {
         this.appService = appService;
-    }
-
-    @ExceptionHandler(NotFoundException.class)
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public
-    @ResponseBody
-    ModelMap handleServiceException(NotFoundException ex) {
-        return new ModelMap("error", ex.getMessage());
-    }
-
-    @ExceptionHandler(DataException.class)
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public
-    @ResponseBody
-    ModelMap handleServiceException(DataException ex) {
-        return new ModelMap("error", ex.getMessage());
-//        ModelAndView modelAndView = new ModelAndView("error");
-//        modelAndView.addObject("error", ex.getMessage());
-//        return modelAndView;
-//        ModelMap model = new ModelMap("result","error");
-//        model.addAttribute("message", ex.getMessage());
-//        return model;
     }
 
     /**
