@@ -15,7 +15,7 @@ public class LoginController {
 	 * @param error
 	 *            - show error message
 	 */
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	@RequestMapping(value = {"/login", "/"}, method = RequestMethod.GET)
 	public ModelAndView login(@RequestParam(required = false) boolean error) {
 		ModelAndView mav = new ModelAndView("login");
 		if (error) {

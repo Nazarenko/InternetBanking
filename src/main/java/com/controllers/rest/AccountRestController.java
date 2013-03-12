@@ -7,6 +7,7 @@ import com.model.ClientStatus;
 import com.services.AppService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +41,7 @@ public class AccountRestController extends ExceptionHandlerRestController {
      * @param page - page number of pagination
      * @return accounts list
      */
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(value = "/accounts", method = RequestMethod.GET)
     public
     @ResponseBody

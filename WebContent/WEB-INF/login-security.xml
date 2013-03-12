@@ -11,23 +11,25 @@ http://www.springframework.org/schema/security/spring-security-3.1.xsd'>
 	<beans:import resource='classpath:applicationContext.xml' />
 	
 	<beans:bean id="redirectHandler" class="com.handlers.RedirectHandler ">
-		<beans:property name="adminUrl" value="/app/admin" />
-		<beans:property name="userUrl" value="/app/client" />
+		<beans:property name="adminUrl" value="/admin" />
+		<beans:property name="userUrl" value="/client" />
 	</beans:bean>
 
+    <global-method-security pre-post-annotations="enabled"/>
+
     <http pattern="/"  security="none"></http>
-    <http pattern="/app/login*"  security="none"></http>
-    <http pattern="/app/resources/**"  security="none"></http>
+    <http pattern="/login*"  security="none"></http>
+    <http pattern="/resources/**"  security="none"></http>
 
 	<http use-expressions="true">
-        <intercept-url pattern="/app/login"  access="permitAll" />
-		<intercept-url pattern='/app/client*' access='hasRole("ROLE_USER")' />
-		<intercept-url pattern='/app/admin*' access='hasRole("ROLE_ADMIN")' />
-        <intercept-url pattern="/app/**" access="isAuthenticated()" />
-		<form-login login-page='/app/login'
+        <intercept-url pattern="/login"  access="permitAll" />
+		<intercept-url pattern='/client*' access='hasRole("ROLE_USER")' />
+		<intercept-url pattern='/admin*' access='hasRole("ROLE_ADMIN")' />
+        <intercept-url pattern="/**" access="isAuthenticated()" />
+		<form-login login-page='/login'
 			authentication-success-handler-ref="redirectHandler"
-			authentication-failure-url='/app/login?error=true' />
-		<logout logout-success-url='/app/login' />
+			authentication-failure-url='/login?error=true' />
+		<logout logout-success-url='/login' />
 		<remember-me />
 	</http>
 

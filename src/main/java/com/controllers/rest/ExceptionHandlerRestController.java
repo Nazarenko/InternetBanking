@@ -48,16 +48,16 @@ public class ExceptionHandlerRestController {
 //        return model;
     }
 
-    /**
-     * Unexpected exceptions handler
-     * @param ex {@Link Exception}
-     * @return JSON response containing error
-     */
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    public
-    @ResponseBody
-    ModelMap handleUnexpectedException(Exception ex) {
-        return new ModelMap("error", ex.getMessage());
-    }
+//    /**
+//     * Unexpected exceptions handler
+//     * @param ex {@Link Exception}
+//     * @return JSON response containing error
+//     */
+//    @ExceptionHandler(Exception.class)
+//    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+//    public
+//    @ResponseBody
+//    ModelMap handleUnexpectedException(Exception ex) {
+//        return new ModelMap("error", ex.getMessage());
+//    }
 }

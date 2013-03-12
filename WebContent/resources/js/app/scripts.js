@@ -18,7 +18,7 @@ var templates = {};
 
 // loads and caches template
 var loadTemplate = function(name){
-    var template = templates[name] || $.get("../tmpl/" + name + ".tmpl.htm");
+    var template = templates[name] || $.get("resources/tmpl/" + name + ".tmpl.html");
     templates[name] = template;
     return template;
 }
